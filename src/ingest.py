@@ -8,7 +8,7 @@ PROJECT_ROOT = os.path.dirname(BASE_DIR)               # one level up (project r
 RAW_DIR = os.path.join(PROJECT_ROOT, "data", "raw")
 METADATA_PATH = os.path.join(RAW_DIR, "metadata.json")
 
-MAX_RESULTS = 170
+MAX_RESULTS = 50
 
 def main():
     os.makedirs(RAW_DIR, exist_ok = True)
