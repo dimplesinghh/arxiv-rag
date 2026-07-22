@@ -29,6 +29,31 @@ python -m src.retrieve
 
 \`\`\`
 
+## Eval Harness (Weekend 2)
+
+**Benchmark**: QASPER (allenai/qasper) — human-annotated QA pairs over 
+NLP/ML papers with gold evidence paragraphs.
+
+**Metrics**:
+- Recall@k: fraction of queries where at least one relevant chunk 
+  appears in top-k results
+- MRR: Mean Reciprocal Rank — rewards finding relevant chunks higher 
+  in the ranking
+
+**Baseline results (naive top-k, no reranking):**
+
+| Config                  | Recall@1 | Recall@5 | Recall@10 | MRR   |
+|-------------------------|----------|----------|-----------|-------|
+| Naive cosine, 512/50    | X.XX     | X.XX     | X.XX      | X.XX  |
+
+*Fill in X.XX with your actual numbers from running eval/run_eval.py*
+
+**Run eval:**
+```bash
+python -m eval.build_qasper_index   # build index once
+python -m eval.run_eval             # compute metrics
+```
+
 ## Known limitations (intentional, to be fixed later)
 - No reranking
 - Fixed-size chunking ignores semantic/section boundaries
