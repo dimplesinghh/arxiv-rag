@@ -51,21 +51,25 @@ def get_gold_evidence(answer_objects):
 
 def chunk_contains_evidence(chunk_text, evidence_list):
     """
-    Check if a chunk contains any gold evidence via substring match.
+    Check if a chunk contains any gold evidence using word overlap.
+
+    Exact substring match fails because chunking and whitespace
+    normalization alter text slightly. Word overlap is more robust.
 
     Args:
         chunk_text    (str):       Text of the retrieved chunk.
         evidence_list (list[str]): Gold evidence paragraphs.
 
     Returns:
-        bool: True if chunk contains at least one evidence string.
+        bool: True if chunk has >50% word overlap with any evidence.
     """
-    chunk_lower = chunk_text.lower()
+    chunk_words = set(chunk_text.lower().split())
     for ev in evidence_list:
-        # use first 100 chars of evidence to match — avoids
-        # exact whitespace mismatch issues
-        snippet = ev[:100].lower().strip()
-        if snippet and snippet in chunk_lower:
+        ev_words = set(ev.lower().split())
+        if not ev_words:
+            continue
+        overlap = len(chunk_words & ev_words) / len(ev_words)
+        if overlap > 0.5:
             return True
     return False
 
