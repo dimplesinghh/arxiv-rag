@@ -65,7 +65,7 @@ def build_bm25_index(chunks):
     return BM25Okapi(tokenized)
 
 
-def hybrid_retrieve(query, chunks, bm25_index, k=10, alpha=0.6):
+def hybrid_retrieve(query, chunks, bm25_index, k=10, alpha=0.8):
     """
     Retrieve top-k chunks using hybrid dense + BM25 scoring.
 

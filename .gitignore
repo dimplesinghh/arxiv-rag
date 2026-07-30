@@ -10,3 +10,5 @@ venv/
 data/raw/metadata.json
 
 eval/results/*.json
+
+documenting_process.md

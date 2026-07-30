@@ -73,7 +73,7 @@ def extract_paper_text(paper):
 def main():
     print("Loading QASPER dataset...")
     # loads the train split — ~888 papers with QA pairs
-    dataset = load_dataset("allenai/qasper", split="train")
+    dataset = load_dataset("allenai/qasper", split="validation")
     print(f"Loaded {len(dataset)} papers from QASPER")
 
     model = SentenceTransformer(MODEL_NAME)

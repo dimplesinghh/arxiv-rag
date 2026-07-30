@@ -104,7 +104,7 @@ def chunk_paper_by_sections(paper_id, full_text_field):
             })
             chunk_idx += 1
     
-    for section, paragraphs in zip(section_names, paragraphs_list):
+    for section, paragraphs in zip(section_name, paragraphs_list):
         if isinstance(paragraphs, str):
             paragraphs = [paragraphs]
         if not isinstance(paragraphs, list):

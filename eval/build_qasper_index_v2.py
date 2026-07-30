@@ -53,7 +53,7 @@ def extract_abstract_chunks(paper):
 
 def main():
     print("Loading QASPER dataset...")
-    dataset = load_dataset("allenai/qasper", split="train")
+    dataset = load_dataset("allenai/qasper", split="validation")
     print(f"Loaded {len(dataset)} papers")
 
     model = SentenceTransformer(MODEL_NAME)
