@@ -59,3 +59,32 @@ python -m eval.run_eval             # compute metrics
 - Fixed-size chunking ignores semantic/section boundaries
 - No quantitative eval yet — relevance judged by eyeballing only
 - No query rewriting/expansion
+
+## Weekend- 3: Hybrid Search + Section-Aware Chunking
+
+### Changes implemented
+- **Section-aware chunking** (`src/chunk_sections.py`): chunks respect 
+  paragraph and section boundaries from QASPER structure, tagged with 
+  section name. Replaces fixed-size 512/50 token splitting.
+- **Hybrid retrieval** (`src/hybrid_retrieve.py`): combines dense cosine 
+  similarity (Qdrant) with BM25 keyword search via weighted fusion 
+  (alpha=0.6 dense, 0.4 BM25).
+
+### Critical bug fixed
+Both Weekend 2 baseline and Weekend 3 indexes were built from the `train` 
+split while eval ran on `validation` split — completely different papers. 
+Fixed by rebuilding both indexes from the validation split. This is why 
+original baseline numbers (Recall@10=0.1176) were artificially low.
+
+### Results after bug fix
+
+| Config | Recall@1 | Recall@5 | Recall@10 | MRR |
+|--------|----------|----------|-----------|-----|
+| Naive dense, fixed 512/50 | 0.1359 | 0.2697 | 0.3517 | 0.1945 |
+| Hybrid dense+BM25, section-aware | 0.1090 | 0.2600 | 0.3247 | 0.1741 |
+
+### Finding
+Dense-only retrieval outperformed hybrid on this benchmark. BM25 added 
+noise rather than signal — likely because section headers prepended to 
+chunks during section-aware chunking (`[Section ::: Subsection]` prefix) 
+polluted BM25 keyword matching with non-query-relevant tokens. 

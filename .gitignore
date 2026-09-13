@@ -12,3 +12,6 @@ data/raw/metadata.json
 eval/results/*.json
 
 documenting_process.md
+arxiv_rag_guide.md
+
+README.md
