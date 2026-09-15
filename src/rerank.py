@@ -17,18 +17,18 @@ from sentence_transformers import CrossEncoder
 
 MODEL_NAME = "cross-encoder/ms-marco-MiniLM-L-6-v2"
 
-reranker = "CrossEncoder/ms-marco-MiniLM-L-6-v2"
-
 # load once at module level — expensive to reload per query
 reranker = CrossEncoder(MODEL_NAME)
 
-def rerank(query, chunks, tok_k=10):
+
+def rerank(query, chunks, top_k=10):
     """
     Rerank retrieved chunks using a cross-encoder model.
 
     The cross-encoder reads query and chunk together in one
     forward pass, producing a relevance score that is more
     accurate than embedding cosine similarity.
+
     Args:
         query  (str):        The user query.
         chunks (list[dict]): Candidate chunks from retrieval.
@@ -42,8 +42,8 @@ def rerank(query, chunks, tok_k=10):
                     chunk fields plus 'rerank_score'.
     """
     if not chunks:
-        return
-    
+        return []
+
     pairs = [(query, c["text"]) for c in chunks]
     scores = reranker.predict(pairs)
 
@@ -51,10 +51,9 @@ def rerank(query, chunks, tok_k=10):
     scored.sort(key=lambda x: x[0], reverse=True)
 
     results = []
-    for score, chunk in scored[:tok_k]:
+    for score, chunk in scored[:top_k]:
         result = dict(chunk)
         result["rerank_score"] = round(float(score), 4)
-        results.append (result)
+        results.append(result)
 
     return results
-
